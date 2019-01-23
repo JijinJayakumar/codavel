@@ -1,20 +1,20 @@
 <?php
 require_once 'bootstrap.php';
 use App\Models\user as users;
-
 $router = new AltoRouter();
-$router->setBasePath('/codavel'); // remove if thisin base directory
-
+$startFunction = "index()";
+$rootDir = (strlen($_SERVER['SCRIPT_NAME']) == '1') ? "" : dirname($_SERVER['SCRIPT_NAME']);
+$router->setBasePath($rootDir); // remove if in cloud directory
 $router->map('GET', '/[a:controller]/[a:action]?', function ($controller, $action = null) {
-    $action = $action !== null ? $action : 'Index';
-    // if (method_exists($controller, $action)) {
+    $action = $action !== null ? $action : 'index';
     if (isset($controller)) {
         $classurl = 'App\\Controllers\\' . $controller;
-        $class = new $classurl();
         if ((method_exists($classurl, $action))) {
+            $class = new $classurl();
             $class->$action();
         } else {
-            echo 'Function missing';
+            header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
+            not_found();
 
         }
     } else {
@@ -22,12 +22,12 @@ $router->map('GET', '/[a:controller]/[a:action]?', function ($controller, $actio
     }
 });
 $match = $router->match();
-
 // call closure or throw 404 status
 if ($match && is_callable($match['target'])) {
     call_user_func_array($match['target'], $match['params']);
 } else {
     // no route was matched
-    // header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
-    echo "<b>404 not found</b>";
+    header($_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
+    not_found();
+
 }

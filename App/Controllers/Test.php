@@ -14,6 +14,11 @@ class Test extends base
         parent::__construct();
     }
 
+    public function index(){
+        echo "Heloo";
+
+    }
+
     public function users()
     {
         $result = User::all('*')->toArray();

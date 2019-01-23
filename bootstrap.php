@@ -28,7 +28,17 @@ $capsule->bootEloquent();
 
 spl_autoload_register(function ($className) {
 
-   $className = str_replace("\\", DIRECTORY_SEPARATOR, $className);
+    $className = str_replace("\\", DIRECTORY_SEPARATOR, $className);
     @include_once '' . $className . '.php';
 
 });
+define('BASE_PATH', "http://localhost/cidavel/codavel/");
+
+function not_found()
+{
+    $loader = new Twig_Loader_Filesystem(__DIR__ . '/App/Views');
+    $twig = new Twig_Environment($loader);
+    echo $twig->render('404/index.php', ["base_url" => BASE_PATH]);
+    return false;
+
+}
