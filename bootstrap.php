@@ -2,20 +2,30 @@
 require 'vendor/autoload.php';
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+//configuration 
 
+define('BASE_PATH', "http://localhost/cidavel/codavel/"); //app url
+$db['host']="localhost";
+$db['database_name']="demo";
+$db['user_name']="root";
+$db['password']="";
+
+
+
+//configuration ends here
 $capsule = new Capsule;
 
 $capsule->addConnection([
 
     "driver" => "mysql",
 
-    "host" => "localhost",
+    "host" => $db['host'],
 
-    "database" => "dyet_cash",
+    "database" => $db['database_name'],
 
-    "username" => "root",
+    "username" => $db['user_name'],
 
-    "password" => "",
+    "password" => $db['password'],
 
 ]);
 
@@ -32,7 +42,6 @@ spl_autoload_register(function ($className) {
     @include_once '' . $className . '.php';
 
 });
-define('BASE_PATH', "http://localhost/cidavel/codavel/");
 
 function not_found()
 {
